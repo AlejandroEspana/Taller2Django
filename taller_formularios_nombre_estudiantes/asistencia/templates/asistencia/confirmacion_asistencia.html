@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .confirmation-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 60px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        .confirmation-container h1 {
+            color: #28a745;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .details-table {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .details-table table {
+            width: 100%;
+            border: none;
+        }
+        .details-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .details-table td:first-child {
+            font-weight: bold;
+            color: #667eea;
+            width: 40%;
+        }
+        .details-table tr:last-child td {
+            border-bottom: none;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn-new {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        .btn-admin {
+            background: #6c757d;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        .record-id {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="success-icon">✓</div>
+        <h1>¡Asistencia Registrada Exitosamente!</h1>
+        
+        <p class="message">Tu asistencia ha sido guardada correctamente en el sistema.</p>
+        
+        <div class="details-table">
+            <table>
+                <tr>
+                    <td>Nombre Completo:</td>
+                    <td><strong>{{ asistencia.nombre_completo }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Documento de Identidad:</td>
+                    <td>{{ asistencia.documento_identidad }}</td>
+                </tr>
+                <tr>
+                    <td>Correo Electrónico:</td>
+                    <td>{{ asistencia.correo_electronico }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de Asistencia:</td>
+                    <td>{{ asistencia.fecha_asistencia|date:"d/m/Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Hora de Ingreso:</td>
+                    <td>{{ asistencia.hora_ingreso|time:"H:i" }}</td>
+                </tr>
+                <tr>
+                    <td>Hora de Salida:</td>
+                    <td>
+                        {% if asistencia.hora_salida %}
+                            {{ asistencia.hora_salida|time:"H:i" }}
+                        {% else %}
+                            <em>No registrada</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Estado:</td>
+                    <td>
+                        {% if asistencia.presente %}
+                            <span style="color: #28a745; font-weight: bold;">Presente</span>
+                        {% else %}
+                            <span style="color: #dc3545; font-weight: bold;">Ausente</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if asistencia.observaciones %}
+                <tr>
+                    <td>Observaciones:</td>
+                    <td>{{ asistencia.observaciones }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+        
+        <div class="btn-group">
+            <a href="{% url 'formulario_asistencia' %}" class="btn-new">Registrar otra asistencia</a>
+            <a href="/admin/asistencia/asistencia/" class="btn-admin">Ver en administración</a>
+        </div>
+        
+        <div class="record-id">
+            <strong>ID de Registro:</strong> {{ asistencia.id }} | <strong>Fecha de Registro:</strong> {{ asistencia.fecha_registro|date:"d/m/Y H:i" }}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
